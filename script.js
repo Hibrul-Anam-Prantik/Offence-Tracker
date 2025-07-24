@@ -5,7 +5,7 @@ const records = {
   'Prantik': 0,
   'Rial': 0
 };
-
+ 
 // Map each name to a custom CSS class
 const memberClasses = {
   'Arnab': 'arnab',
