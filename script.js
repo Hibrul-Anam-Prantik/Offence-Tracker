@@ -1,3 +1,18 @@
+import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBgJqilQlgM8WwD4d0dPgAZlXtt3glAJI4",
+  authDomain: "offence-tracker.firebaseapp.com",
+  projectId: "offence-tracker",
+  storageBucket: "offence-tracker.firebasestorage.app",
+  messagingSenderId: "465505128950",
+  appId: "1:465505128950:web:a21a61050652161f7e37d7",
+  measurementId: "G-098GQ7MD65"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 // Initial offence record
 const records = {
   'Arnab': 0,
@@ -5,7 +20,27 @@ const records = {
   'Prantik': 0,
   'Rial': 0
 };
- 
+
+async function loadRecords() {
+  const docRef = doc(db, "offences", "flatmates");
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    Object.keys(data).forEach(name => {
+      records[name] = data[name];
+    });
+  } else {
+    // First-time setup
+    await setDoc(docRef, records);
+  }
+
+  renderMembers();
+}
+
+loadRecords();
+
+
 // Map each name to a custom CSS class
 const memberClasses = {
   'Arnab': 'arnab',
@@ -45,21 +80,25 @@ function renderMembers() {
 }
 
 // Handle offence logic
-function addOffence(name) {
+async function addOffence(name) {
   records[name] += 1;
 
   if (records[name] >= 5) {
     messageDiv.textContent = `🎉 ${name}, you reached 5 offences! Treat time!`;
     messageDiv.classList.add('active');
-    records[name] = 0; // reset
+    records[name] = 0;
   } else {
     messageDiv.textContent = `${name} now has ${records[name]} offences.`;
     messageDiv.classList.add('active');
   }
 
-  // Update the count visually
+  // Update Firestore
+  const docRef = doc(db, "offences", "flatmates");
+  await updateDoc(docRef, { [name]: records[name] });
+
   document.getElementById(`count-${name}`).textContent = `Offences: ${records[name]}`;
 }
+
 
 // Initialize the UI
 renderMembers();
