@@ -4,16 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flat Offence Tracker</title>
-
-  <!-- Link CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Flat Offence Tracker</h1>
-  <div class="members" id="members"></div>
+  <div class="members" id="offence-container"></div>
   <div class="message" id="message"></div>
 
-  <!-- Link JavaScript -->
-  <script src="script.js"></script>
+  <!-- Firebase Firestore Setup -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      updateDoc,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBgJqilQlgM8WwD4d0dPgAZlXtt3glAJI4",
+      authDomain: "offence-tracker.firebaseapp.com",
+      projectId: "offence-tracker",
+      storageBucket: "offence-tracker.appspot.com",
+      messagingSenderId: "465505128950",
+      appId: "1:465505128950:web:a21a61050652161f7e37d7",
+      measurementId: "G-098GQ7MD65"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Expose Firestore to external script
+    window.firebaseDB = db;
+    window.firebaseTools = { doc, getDoc, setDoc, updateDoc, onSnapshot };
+  </script>
+
+  <!-- Your main logic file -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
