@@ -83,8 +83,8 @@ function renderMembers() {
 async function addOffence(name) {
   records[name] += 1;
 
-  if (records[name] >= 5) {
-    messageDiv.textContent = `🎉 ${name}, you reached 5 offences! Treat time!`;
+  if (records[name] >= 3) {
+    messageDiv.textContent = `🎉 ${name}, you reached 3 offences! Treat time!`;
     messageDiv.classList.add('active');
     records[name] = 0;
   } else {
