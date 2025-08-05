@@ -1,0 +1,1 @@
+This is a fun project. It counts and tracks the number of offences for each members. When a member reaches maximum 5 number of offences, thich will track the member and give him a penalty of treating other members.
